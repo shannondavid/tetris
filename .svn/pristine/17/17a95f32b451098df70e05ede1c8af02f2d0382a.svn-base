@@ -1,0 +1,131 @@
+/**
+ * David Shannon
+ * TCSS 305 -- Assignment 6a, Tetris
+ * Spring 2018
+ */
+
+
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.JPanel;
+//import javax.swing.border.Border;
+
+/**
+ * Class for the graphical panel. 
+ * 
+ * @author davidshannon
+ * @version 1
+ */
+public class GraphicalPanel extends JPanel implements PropertyChangeListener {
+
+    //data fields:
+    
+    /** Generated serial version ID. */
+    private static final long serialVersionUID = 6355610856107820841L;
+    
+    /** Dimension for this JPanel. */
+    private static final Dimension MY_PANEL_DIM = new Dimension(200, 400);
+    
+    /** Dimension for next-piece Panel. */
+    private static final Dimension MY_PIECE_DIM = new Dimension(160, 160);
+    
+    /** JPanel to display current piece. */
+    private final JPanel myNextPiecePanel;
+    
+    /** String representation of next TetrisPiece. */
+    private String myNextPiece;
+    
+    /** The size in pixels of a side of one "square" on the grid. */
+    private int mySquareSize;
+    
+    /** Array of each line from myNextPiece. */
+    private String[] myNPStrings;
+    
+    //constructor:
+    
+    /** 
+     * Constructor for the graphical Panel. 
+     * 
+     * @param theSquareSize the size of an individual Tetris block.
+     */
+    public GraphicalPanel(final int theSquareSize) {
+        super();
+        myNextPiecePanel = new JPanel();
+        mySquareSize = theSquareSize;
+      
+        setUpPanel();   
+    }
+    
+    /**
+     * Method for changing size of square.
+     * @param theSize The new size of a single block.
+     */
+    public void setSquareSize(final int theSize) {
+        mySquareSize = theSize;
+    }
+    
+    /**
+     * Private helper method for setting up panel.
+     */
+    private void setUpPanel() {
+        this.setSize(MY_PANEL_DIM);           //is this redundant?
+        this.setPreferredSize(MY_PANEL_DIM);
+        myNextPiecePanel.setSize(MY_PIECE_DIM);
+        this.add(myNextPiecePanel, BorderLayout.CENTER);
+    }
+    
+    /**
+     * Paints the next game piece. Triggered by repaint() method call.
+     * 
+     * @param theGraphics The graphics context to use for painting.
+     */
+    @Override
+    public void paintComponent(final Graphics theGraphics) {
+        super.paintComponent(theGraphics);
+        final Graphics2D g2d = (Graphics2D) theGraphics;
+
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                             RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        myNPStrings = myNextPiece.split("\n");
+        for (int x = 0; x < myNPStrings.length; x++) {
+            for (int y = 0; y < myNPStrings.length; y++) {
+                final Rectangle2D.Double block =
+                                new Rectangle2D.Double((double) y * mySquareSize,
+                                                       (double) x * mySquareSize,
+                                                       (double) mySquareSize,
+                                                       (double) mySquareSize);
+                if (myNPStrings[x].charAt(y) != ' ') {
+                    g2d.setPaint(Color.WHITE);
+                    g2d.draw(block);
+                } else {
+                    g2d.setPaint(Color.BLACK);
+                    g2d.fill(block);
+                }
+            }
+        }
+    }
+    
+    
+    @Override
+    public void propertyChange(final PropertyChangeEvent theEvent) {
+        final String propertyName = theEvent.getPropertyName();
+        
+        if ("preview".equals(propertyName)) {
+            myNextPiece = (String) theEvent.getNewValue();
+            repaint();
+            // System.out.println(myStringBoard);
+        }
+//        } else if ("lines cleared".equals(propertyName)) { 
+//        }
+    }
+}

@@ -1,0 +1,178 @@
+/**
+ * David Shannon
+ * TCSS 305 -- Assignment 6a, Tetris
+ * Spring 2018
+ */
+
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
+/**
+ * Class for the GUI.
+ * 
+ * @author davidshannon
+ * @version 1
+ */
+public class TetrisGUI implements /*PropertyChangeListener,*/ ActionListener {
+    
+    /** Initial size of square, in pixels. */
+    private static final int INIT_SQUARE_SIZE = 20;
+    
+    /** Minimum width of JFrame.  */
+    private static final int MIN_WIDTH = 420;
+    
+    /** Minimum Height of JFrame. */
+    private static final int MIN_HEIGHT = 482;
+    
+    /** The width factor of the board. */
+    private static final int WIDTH_FACTOR = 10;
+    
+    /** The height factor of the board. */
+    private static final int HEIGHT_FACTOR = 20;
+    
+    /** Total number of blocks on the board.*/
+    private static final int TOTAL_NUM_BLOCKS = 200;
+    
+    /** JFrame upon which game board is placed. */
+    private final JFrame myJFrame;
+    
+    /** JPanel for representing Graphical Info. */
+    private final GraphicalPanel myGraphicalPanel;
+    
+    /** JPanel for representing Game Board. */
+    private final GamePanel myGamePanel;
+    
+    /** Timer used to control down movement of pieces. */
+    private final Timer myTimer;
+    
+    /** JMenu used for holding JMenuItems. */
+    private final JMenuBar myMenuBar;
+    
+    /** Array of menu items. */
+    private final List<Object> myMenuArray;
+    
+    /** Top-level panel to contain Tetris game. */
+    //private final JPanel myLeftPanel;
+    
+    /** Top-level panel to contain graphical panel. */
+    //private final JPanel myRightPanel;
+    
+//    /** The size in pixels of a side of one "square" on the grid. */
+//    private int mySquareSize = INIT_SQUARE_SIZE;
+
+    /** 
+     * Constructor for the board/GUI. 
+     * 
+     * @param theDelay the time delay for the program's timer. 
+     */
+    public TetrisGUI(final int theDelay) {
+        myJFrame = new JFrame("Tetris");
+        myGamePanel = new GamePanel(INIT_SQUARE_SIZE);
+        myGraphicalPanel = new GraphicalPanel(INIT_SQUARE_SIZE);
+        //myLeftPanel = new JPanel();
+        //myRightPanel = new JPanel();
+        myTimer = new Timer(theDelay, this); //set this once game "play" starts
+        myMenuBar = new JMenuBar();
+        myMenuArray = new ArrayList<Object>();
+    }
+    
+    /** Method for building/starting the board. */
+    protected void start() {
+        //myLeftPanel.add(myGamePanel, BorderLayout.WEST);
+        //myRightPanel.add(myGraphicalPanel, BorderLayout.CENTER);
+        myTimer.setRepeats(true);
+        setUpJMenu();
+        setUpJFrame();
+   
+    }
+    
+    /**
+     * Private helper method for establishing JMenu.
+     */
+    private void setUpJMenu() {
+        final JMenuItem controls = new JMenuItem("Controls");
+        controls.addActionListener(this);
+        myMenuArray.add(controls);
+        myMenuBar.add(controls);
+        myMenuBar.setVisible(true);
+                        
+    }
+    
+    
+    
+    /**
+     * Private helper method for establishing JFrame.
+     */
+    private void setUpJFrame() {
+
+        myJFrame.add(/*myLeftPanel*/myGamePanel, BorderLayout.CENTER);
+        myJFrame.add(/*myRightPanel*/ myGraphicalPanel, BorderLayout.EAST);
+        myJFrame.setJMenuBar(myMenuBar);
+        myJFrame.pack();
+        //System.out.print("width: " + myJFrame.getWidth() + myJFrame.getHeight());
+        myJFrame.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
+        myJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myJFrame.setLocationRelativeTo(null); 
+        myJFrame.setVisible(true);
+        myJFrame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(final ComponentEvent theComponentEvent) {
+                
+                final int frameWidth = myJFrame.getWidth() / 2;
+                final int frameHeight = myJFrame.getHeight();
+                int newSize = frameWidth * frameHeight / TOTAL_NUM_BLOCKS; 
+                newSize = (int) Math.sqrt(newSize);
+                //    System.out.println(newSize);
+              //if ((frameHeight / newSize >= 20)/* && ((frameWidth * 2) / newSize == 20)*/ ) {
+                myGamePanel.setSquareSize(newSize);
+                myGamePanel.setSize(new Dimension(newSize * WIDTH_FACTOR,
+                                                           newSize * HEIGHT_FACTOR));
+                myGamePanel.setVisible(true);
+                myGraphicalPanel.setSquareSize(newSize);
+                myGamePanel.repaint();
+                myGraphicalPanel.repaint();
+            }
+        });
+        
+        myGamePanel.getMyBoard().addPropertyChangeListener(myGraphicalPanel);
+        myGamePanel.getMyBoard().newGame(); // starts the game
+        myTimer.start();
+        
+        //System.out.print(myMenuBar.getComponent(0).toString());
+
+    }
+
+//    @Override
+//    public void propertyChange(final PropertyChangeEvent theEvent) {
+//        // TODO Auto-generated method stub
+//        
+//    }
+
+    @Override
+    public void actionPerformed(final ActionEvent theEvent) {
+        final Object source = theEvent.getSource();
+        if (source.equals(myTimer)) {
+            myGamePanel.getMyBoard().down();
+        } else if (source.toString().equals(myMenuArray.get(0).toString()))  {
+            JOptionPane.showMessageDialog(null, "Controls for the game:\n"
+                            + "Move left: left arrow and 'a'\n"
+                            + "Move right: right arrow and 'd'\n"
+                            + "Rotate: up arrow and 'w'\n"
+                            + "Move Down: down arrow and 's'\n"
+                            + "Drop: space", "Game Controls", JOptionPane.PLAIN_MESSAGE);   
+        } 
+    }
+   
+}
