@@ -100,12 +100,6 @@ public class GraphicalPanel extends JPanel implements PropertyChangeListener {
     private int myHighScore;
     
     
-//    /** JLabel used for displaying score. */
-//    private JLabel myScoreLabel;
-//    
-//    /** JLabel used for displaying level. */
-//    private JLabel myLevelLabel;
-//    
     //constructor:
     
     /**
@@ -141,7 +135,6 @@ public class GraphicalPanel extends JPanel implements PropertyChangeListener {
         myScore = 0;
         myLevel = 1;
         myLinesCleared = 0;
-        //repaint();
     }
    
     
@@ -153,14 +146,11 @@ public class GraphicalPanel extends JPanel implements PropertyChangeListener {
         this.setPreferredSize(MY_PANEL_DIM);
         myNextPiecePanel.setSize(MY_PIECE_DIM);
         this.add(myNextPiecePanel, BorderLayout.CENTER);
-        //this.setBackground(Color.GRAY);
-        //this.setOpaque(true);
     }
     
     /** Public method for updating score; called when timer fired. */
     public void updateScore() {
         myScore += SCORE_INCREMENT;
-        //System.out.println("Score: " + myScore);
         setHighScore(myScore);
         repaint();
     }
@@ -241,16 +231,7 @@ public class GraphicalPanel extends JPanel implements PropertyChangeListener {
                     myPCS.firePropertyChange("level up", myLevel - 1, myLevel);
                 }
             }
-            
-//            for (int i = 0; i < num; i++) {
-//                myLinesCleared++;
-//                myScore += LINE_SCORE_INCREMENT;
-//                //myPCS.firePropertyChange("score change", myScore - LINE_SCORE_INCREMENT,
-//                //                         myScore);
-
-        } //else if ("game over".equals(propertyName)) {
-            //resetScores();
-        //}
+        }
     }
     
     /**

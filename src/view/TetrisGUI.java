@@ -51,9 +51,6 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
     private static final int END_GAME = 1;
     
     /** Int used for index of menu item event. */
-   // private static final int OPTIONS = 3;
-    
-    /** Int used for index of menu item event. */
     private static final int HELP = 2;
     
     /** String used for pause property change listener. */
@@ -63,7 +60,7 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
     private static final String UNPAUSE = "unpause";
     
     /** String used for game over property change listener. */
-    private static final String GAME_OVER = "gameover";
+    private static final String GAME_OVER = "game over";
     
    
     /** Initial delay of the timer. */
@@ -93,17 +90,7 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
     /** Array of menu items. */
     private final List<Object> myMenuArray;
     
-    /** Delay of timer, in ms. */
-    //private double myTimerDelay;
-    
-    /** String that holds theme of tetris game. */
-    //private String myTetrisTheme;
 
-    /** Top-level panel to contain Tetris game. */
-    //private final JPanel myLeftPanel;
-    
-//    /** The size in pixels of a side of one "square" on the grid. */
-//    private int mySquareSize = INIT_SQUARE_SIZE;
 
     /** 
      * Constructor for the board/GUI. 
@@ -116,17 +103,15 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
         myGraphicalPanel = new GraphicalPanel(INIT_SQ_SIZE);
         myPaused = false;
         myInitialTimerDelay = theDelay;
-        myTimer = new Timer(theDelay, this); //set this once game "play" starts
+        myTimer = new Timer(theDelay, this); 
         myMenuBar = new JMenuBar();
         myMenuArray = new ArrayList<Object>();
-        //myTimerDelay = (double) theDelay;
-        //myTetrisTheme = "Classic";
     }
     
     /** Method for building/starting the board. */
     protected void start() {
 
-        myGamePanel.setPlaying(false); //necessary?
+        myGamePanel.setPlaying(false); 
         myTimer.setRepeats(true);
         setUpJMenu();
         setUpJFrame();
@@ -140,22 +125,18 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
 
         final JMenuItem newgame = new JMenuItem("New Game");
         final JMenuItem endgame = new JMenuItem("End Game");
-        //final JMenu options = setUpOptionsMenu(new JMenu("Options"));
         final JMenuItem help = new JMenuItem("Help");
         
         newgame.addActionListener(this);
         endgame.addActionListener(this);
-        //options.addActionListener(this);
         help.addActionListener(this);
         
         myMenuArray.add(newgame);
         myMenuArray.add(endgame);
-        //myMenuArray.add(options);
         myMenuArray.add(help);
         
         myMenuBar.add(newgame);
         myMenuBar.add(endgame);
-        //myMenuBar.add(options);
         myMenuBar.add(help);
         
         myMenuBar.setVisible(true);
@@ -193,34 +174,6 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
 
     }
     
-
-//    @Override
-//    public void propertyChange(final PropertyChangeEvent theEvent) {
-//        // TODO Auto-generated method stub
-//        
-//    }
-    
-//    /**
-//     * Private helper method for setting up options menu. 
-//     * @param theOptions the JMenu to be manipulated
-//     * @return theOptions JMenu
-//     */
-//    private JMenu setUpOptionsMenu(final JMenu theOptions) {
-//        final JMenuItem classic = new JMenuItem("Classic");
-//        final JMenuItem camping = new JMenuItem("Retro");
-//        final JMenuItem ocean = new JMenuItem("Ocean");
-//        
-//        // adds each item to the options menu:
-//        theOptions.add(classic);
-//        theOptions.addSeparator();
-//        theOptions.add(camping);
-//        theOptions.addSeparator();
-//        theOptions.add(ocean); 
-//        
-//        return theOptions;
-//    }
-    
-    
     
     
 
@@ -231,6 +184,7 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
         if (source.equals(myTimer)) {
             myGamePanel.getMyBoard().down();
             myGraphicalPanel.updateScore();
+            
         //if "HELP" pressed
         } else if (source.toString().equals(myMenuArray.get(HELP).toString()))  { 
             
@@ -264,9 +218,6 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
         //if "END GAME" pressed
         } else if (source.toString().equals(myMenuArray.get(END_GAME).toString())) { 
             myPCS.firePropertyChange(GAME_OVER, false, true);
-        //if "OPTIONS" pressed
-        //} else if (source.toString().equals(myMenuArray.get(OPTIONS).toString())) {
-            
         }
     }
     
@@ -277,17 +228,12 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
         if (GAME_OVER.equals(propertyName)) {
             myTimer.stop();
             myGamePanel.setPlaying(false);
-            //myGamePanel.removeKeyListener(myGamePanel);
-            //myGamePanel.getMyBoard().removePropertyChangeListener(myGraphicalPanel);
-            //myGamePanel.getMyBoard().removePropertyChangeListener(myGamePanel);
             JOptionPane.showMessageDialog(null, "Game Over!", "well done...",
                                           JOptionPane.INFORMATION_MESSAGE);
-            //myGraphicalPanel.resetScores();
             ((Component) myMenuArray.get(0)).setEnabled(true);     //enables newgame
             ((Component) myMenuArray.get(1)).setEnabled(false);    //disables endgame  
         } else if ("level up".equals(propertyName)) {
             myTimer.setDelay((int) (myTimer.getDelay() * DELAY_FACTOR));
-            //myLevelLabel.setText("Level :" + theEvent.getNewValue());
             myJFrame.repaint();
         } else if (PAUSE.equals(propertyName)) {
             myTimer.stop();
@@ -295,7 +241,6 @@ public class TetrisGUI implements PropertyChangeListener, ActionListener, KeyLis
                 myPaused = true;
             }
             myGamePanel.setPlaying(false);
-            //myGamePanel.removeKeyListener(myGamePanel);
         } else if (UNPAUSE.equals(propertyName) && myPaused) {
             myGamePanel.setPlaying(true);
             myTimer.start();

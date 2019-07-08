@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener, KeyList
     private int mySquareSize;
     
     /** Game Board to be placed on GamePanel. */
-    private final Board myBoard;
+    protected final Board myBoard;
     
     /** Width of the game board. */
     //private final int myWidth;
@@ -66,7 +66,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener, KeyList
     /** 
      * Constructor for the Game Panel. 
      * 
-     * @param theSquareSize size of each individual tetris block.
+     * @param theSquareSize size of each individual Tetris block.
      */
     public GamePanel(final int theSquareSize) {
         super();
@@ -183,7 +183,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener, KeyList
         return color;
         
     }
-
+    
 
     @Override
     public void propertyChange(final PropertyChangeEvent theEvent) {
@@ -192,15 +192,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener, KeyList
         if ("piece moved".equals(propertyName)) {
             myStringBoard = (String) theEvent.getNewValue();
             repaint();
-            //System.out.println("==========");
-            //System.out.println(myStringBoard);
-        //} //else if ("game over".equals(propertyName)) {
-            //final JOptionPane gameover = new JOptionPane("Game Over!");
-            //JOptionPane.showMessageDialog(null, "Game Over!", "well done...",
-            //                              JOptionPane.INFORMATION_MESSAGE);
-            //this.removeKeyListener(this);
-            
-        }     
+        }
     }
 
 
@@ -219,9 +211,6 @@ public class GamePanel extends JPanel implements PropertyChangeListener, KeyList
                 myBoard.down();
             }
         }
-//        } else if (key == KeyEvent.VK_SPACE) {
-//            myBoard.drop();
-//        } 
         
     }
 
