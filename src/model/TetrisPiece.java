@@ -1,5 +1,5 @@
 /*
- * TCSS 305 - Project Tetris
+s * TCSS 305 - Project Tetris
  */
 
 package model;
